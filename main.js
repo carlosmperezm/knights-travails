@@ -58,8 +58,6 @@ class Position {
 }
 
 
-// console.log(getPath([0, 0], [3, 3]))
-// console.log(getPath([3, 3], [0, 0]))
 
 function knightMoves(startPosition, endPosition) {
 
@@ -76,7 +74,7 @@ function knightMoves(startPosition, endPosition) {
     counter++;
 
     // Take the next position in the queue
-    const position = new Position(positionsToVisit.shift().coordinates);
+    const position = positionsToVisit.shift();
     console.log('Extracting from the queue Position: ', position.coordinates)
     console.log('Whose parent is: ', position.parentPosition)
     // Add the position to the visited list
@@ -94,9 +92,9 @@ function knightMoves(startPosition, endPosition) {
       // Add all the positions that has been used to get to the final Position
       while (pos) {
         console.log('Taking the parent of: ', pos)
-        path.unshift(position.coordinates)
+        path.unshift(pos.coordinates)
         console.log("Buidling path: ", path)
-        pos = position.parentPosition;
+        pos = pos.parentPosition;
       }
       console.log('PATH: ', path)
       return path;
@@ -123,6 +121,7 @@ function knightMoves(startPosition, endPosition) {
         childPosition.parentPosition = position;
         console.log('Adding to the queue: ', childPosition)
         positionsToVisit.push(childPosition);
+        console.log('Checking on the Postions to visit list: ', positionsToVisit)
       } else {
         console.log('Skipping: ', pos.coordinates)
       }
@@ -132,4 +131,8 @@ function knightMoves(startPosition, endPosition) {
 
 }
 
-knightMoves([3, 3], [0, 0]);
+// knightMoves([3, 3], [0, 0]);
+// knightMoves([0, 0], [3, 3]);
+// knightMoves([0, 0], [7, 7]); 
+knightMoves([3, 3], [4, 3])
+
