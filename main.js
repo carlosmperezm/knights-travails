@@ -1,6 +1,55 @@
 
+/*
+ * To find the fastest path traverse the positions(nodes) in Breadth-First Search (BFS),
+ * that's basically going in level order. In that way, the position will be found
+ * will the less positions(nodes) possible.
+ *
+ * #1 Problem: how to keep track of the poistions that will lead me to the
+ * closest path posible.
+ *
+ * Posible solutions:
+ *  1. Make each position(nodes) have a reference to its previous position(parent node).
+ *  So that when the desired position is found, we can ask that position who was the
+ *  previous position before it, and so on until reach the satarted position.
+ *
+ */
+
 let path = [];
 let firstPositions;
+
+class Position {
+  x;
+  y;
+  parentPosition = [];
+  children = [];
+
+  constructor(coordinates) {
+    this.x = coordinates[0];
+    this.y = coordinates[1];
+    this.children = getSurroundedValidPositions();
+  }
+
+  getSurroundedValidPositions() {
+    const surroundedPositions = [
+      [this.x - 2, this.y - 1],
+      [this.x - 1, this.y - 2],
+      [this.x + 1, this.y - 2],
+      [this.x + 2, this.y - 1],
+      [this.x + 2, this.y + 1],
+      [this.x + 1, this.y + 2],
+      [this.x - 1, this.y + 2],
+      [this.x - 2, this.y + 1],
+    ];
+    const validPositions = surroundedPositions.filter(position => {
+      return position[0] >= 0
+        && position[0] <= 7
+        && position[1] >= 0
+        && position[1] <= 7;
+    });
+    return validPositions;
+  }
+
+}
 
 function getPath(startPosition, endPosition) {
   let positions = getSurroundedValidPositions(startPosition);
@@ -58,10 +107,6 @@ function getSurroundedValidPositions(position) {
 
 // console.log(getPath([0, 0], [3, 3]))
 // console.log(getPath([3, 3], [0, 0]))
-//
-//
-//
-
 
 function knightMoves(startPosition, endPosition) {
   const queue = [startPosition];
