@@ -1,18 +1,5 @@
 
-/*
- * To find the fastest path traverse the positions(nodes) in Breadth-First Search (BFS),
- * that's basically going in level order. In that way, the position will be found
- * will the less positions(nodes) possible.
- *
- * #1 Problem: how to keep track of the poistions that will lead me to the
- * closest path posible.
- *
- * Posible solutions:
- *  1. Make each position(nodes) have a reference to its previous position(parent node).
- *  So that when the desired position is found, we can ask that position who was the
- *  previous position before it, and so on until reach the satarted position.
- *
- */
+// Class to access positions' data easier.
 class Position {
   x;
   y;
@@ -29,6 +16,11 @@ class Position {
     return this.#getSurroundedValidPositions();
   }
   #getSurroundedValidPositions() {
+    /*
+     * Get all valid option based on each position instance
+     */
+
+    // Get all options
     const surroundedPositions = [
       new Position([this.x - 2, this.y - 1]),
       new Position([this.x - 1, this.y - 2]),
@@ -39,6 +31,7 @@ class Position {
       new Position([this.x - 1, this.y + 2]),
       new Position([this.x - 2, this.y + 1]),
     ];
+    // Filter the positions to keep only the ones that don't go out of the board
     const validPositions = surroundedPositions.filter(position => {
       return position.x >= 0
         && position.x <= 7
@@ -51,25 +44,33 @@ class Position {
 }
 
 function knightMoves(startPosition, endPosition) {
+  // Create instances to work better with the positions' data
   const firstPosition = new Position(startPosition);
   const finalPosition = new Position(endPosition);
+  // List to keep track of all the positions we have to visit
   const positionsToVisit = [firstPosition];
+  // List to keep track of all visited positions so we don't repeat positions
   const visitedPositions = [];
 
+  //While there's still positions to visit
   while (positionsToVisit.length != 0) {
-    // Take the next position in the queue
+    // Take out the next position in the queue and store it 
     const position = positionsToVisit.shift();
-    // Add the position to the visited list
+    // Add the position to the visited list because we are visiting it
     visitedPositions.push(position);
 
     // If position is found
     if (position.x === finalPosition.x && position.y === finalPosition.y) {
-      // Return the path
       path = [];
-      let pos = position
-      // Add all the positions that has been used to get to the final Position
+      // Element that will be used to build the path backwards
+      let pos = position // Starting for the last position (the final position)
+      // Add all the parents positions so we can build the path
       while (pos) {
+        //Add the element at the beginning of the path so we don't 
+        //have to reverse it later
         path.unshift(pos.coordinates)
+        // After the element was added to the path,
+        // move on to its parent position
         pos = pos.parentPosition;
       }
       console.log(`You made it in ${path.length - 1} moves!  Here's your path:`)
@@ -90,10 +91,13 @@ function knightMoves(startPosition, endPosition) {
         return element.x === pos.x && element.y === pos.y;
       });
 
-      // Is a valid position
+      // If it is a valid position
       if (!isChildInQueue && !wasChildVisited) {
+        // Create a new instance for this child
         const childPosition = new Position(pos.coordinates);
+        // Set its parent to the current position
         childPosition.parentPosition = position;
+        //Add the child to the list so we visit it later
         positionsToVisit.push(childPosition);
       }
     }
